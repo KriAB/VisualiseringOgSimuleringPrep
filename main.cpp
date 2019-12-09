@@ -10,9 +10,10 @@ struct Grid
 {
     gsl::Vector3D mGrid[4][3];
 
-    // R  |--- Kolonne
+    // R  |--- Kolonne 3
     // a  |
     // d  |
+    // 4  |
     //-----------
     // 4 x 3 matrise
     //----------
@@ -37,12 +38,13 @@ struct Grid
                 int pointCount = 0;
                 for(auto pts : points)
                 {
+                    mGrid[i][j].x = minX+2*i;
+                    mGrid[i][j].y = minY+2*j;
                     if( minX + 2*i - 1 <= pts.x && pts.x < minX + 2*i +1)
                     {
                         if(minY + 2 * j - 1 <= pts.y && pts.y < minY +2*j +1)
                         {
-                            mGrid[i][j].x = minX+2*i;
-                            mGrid[i][j].y = minY+2*j;
+
                             mGrid[i][j].z = mGrid[i][j].z + pts.z;
                             pointCount++;
                         }
@@ -54,7 +56,6 @@ struct Grid
                     mGrid[i][j] = gsl::Vector3D(mGrid[i][j].x, mGrid[i][j].y, mGrid[i][j].z/pointCount );
                 }
             }
-
         }
     }
     bool compare(float a, float b)
@@ -179,11 +180,11 @@ int main()
 
     // [2][1].xy og [3][2].xy må settes selv for de var ikke satt
 
-    matrise.mGrid[2][1].x = 4;
-    matrise.mGrid[2][1].y = 2;
+//    matrise.mGrid[2][1].x = 4;
+//    matrise.mGrid[2][1].y = 2;
 
-    matrise.mGrid[3][2].x = 6;
-    matrise.mGrid[3][2].y = 4;
+//    matrise.mGrid[3][2].x = 6;
+//    matrise.mGrid[3][2].y = 4;
 
 
 
@@ -356,6 +357,19 @@ int main()
 
     //Oppgave e)
     //Hva er ballens koordinater når den begynner å endre retning?
+    //Koordinatene er 2,2 når den begynnter å snu retning.
+
+    //Oppgave f)
+    //Vi antar at ballen hele tiden ruller på en trekant,og at de tre første trekantene er Ti, Tj, Tk.
+    //Regn ut tiden det tar til ballen ruller over fra Ti til Tj og fra Tj til Tk.
+
+    //p = deltaposisjon, lengden mellom posisjonene.
+    //
+
+
+
+
+
     //--------------------------END--------------------------------------
 
 
