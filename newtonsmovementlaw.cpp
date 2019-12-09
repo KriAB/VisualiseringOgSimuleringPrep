@@ -47,6 +47,7 @@ gsl::Vector3D NewtonsMovementLaw::calcGravityForce()
 
 gsl::Vector3D NewtonsMovementLaw::calcNormal3Pts(gsl::Vector3D p1, gsl::Vector3D p2, gsl::Vector3D p3)
 {
+    //Dette er en venstrehåndsnormal
     gsl::Vector3D v = p2-p1;
     gsl::Vector3D w = p3-p1;
     float Nx = (v.y*w.z)-(v.z*w.y);

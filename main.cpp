@@ -3,6 +3,7 @@
 #include "vector3d.h"
 #include <array>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -178,13 +179,10 @@ int main()
     std::cout << std::endl;
 
 
-    // [2][1].xy og [3][2].xy må settes selv for de var ikke satt
+    // [2][1].z og [3][2].z må settes selv for de var ikke satt
 
-//    matrise.mGrid[2][1].x = 4;
-//    matrise.mGrid[2][1].y = 2;
-
-//    matrise.mGrid[3][2].x = 6;
-//    matrise.mGrid[3][2].y = 4;
+//    matrise.mGrid[2][1].z = something;
+//    matrise.mGrid[3][2].z = something;
 
 
 
@@ -220,6 +218,7 @@ int main()
     gsl::Vector3D oldVelocity{0,0,0};
 
     //Den første trekanten:
+    int triangleNumber1{0};
     for(int i = 0; i < triangles.size() - 2; i+=3)
     {
         if(checkBarycentric(triangles.at(i),triangles.at(i+1), triangles.at(i+2), ballCoord))
@@ -228,10 +227,12 @@ int main()
             newton2.calcNormal3Pts(triangles.at(i),triangles.at(i+1), triangles.at(i+2));
             isFound = true;
             // std::cout << " T "<< i <<": " <<  triangles.at(i) << " " << triangles.at(i+1) << " " <<  triangles.at(i+2) << std::endl;
-            tri1 = i;
+            tri1 = triangleNumber1;
+
             break;
 
         }
+        triangleNumber1++;
     }
 
     if(isFound)
@@ -261,13 +262,14 @@ int main()
         ballCoord = ballCoord + oldVelocity;
 
 
+        int triangleNumber{0};
         //T2
         for(int i = 0; i < triangles.size() - 2; i+=3)
         {
             if(checkBarycentric(triangles.at(i),triangles.at(i+1), triangles.at(i+2), ballCoord))
             {
                 //Må passe på at den ikke stopper ved trekanten som allerede er funnet.
-                if(tri1 == i)
+                if(tri1 == triangleNumber)
                 {
 
                 }
@@ -277,10 +279,11 @@ int main()
                     isFound = true;
                     // std::cout << " T "<< i <<": " <<  triangles.at(i) << " " << triangles.at(i+1) << " " <<  triangles.at(i+2) << std::endl;
 
-                    tri2 = i;
+                    tri2 = triangleNumber;
                     break;
                 }
             }
+            triangleNumber++;
         }
         if(isFound)
             break;
@@ -313,12 +316,13 @@ int main()
         oldVelocity = newton2.calcNewVelocity(deltaTime, oldVelocity,newton2.getAcceleration());
         ballCoord = ballCoord + oldVelocity;
 
+        int triangleNumber{0};
         for(int i = 0; i < triangles.size() - 2; i+=3)
         {
             if(checkBarycentric(triangles.at(i),triangles.at(i+1), triangles.at(i+2), ballCoord))
             {
                 //Må passe på at den ikke stopper ved trekantene som allerede er funnet.
-                if(tri2 == i || tri1 == i)
+                if(tri2 == triangleNumber || tri1 == triangleNumber)
                 {
 
                 }
@@ -328,10 +332,11 @@ int main()
                     isFound = true;
                     //                    std::cout << " T "<< i <<": " <<  triangles.at(i) << " " << triangles.at(i+1) << " " <<  triangles.at(i+2) << std::endl;
 
-                    tri3 = i;
+                    tri3 = triangleNumber;
                     break;
                 }
             }
+            triangleNumber++;
         }
 
         if(isFound)
@@ -350,10 +355,11 @@ int main()
         std::cout << std::endl;
     }
 
+
     //Triangel 6,9,12 er de tre første.
-    // akselerasjon: 6: 4.0,  -4.0,  -1.8    //Coord:    0  , 4   , 2
-    // akselerasjon: 8: 2.31, -2.31, -0.56  //Coord: ca: 1.0, 2.98, 1.54
-    // akselerasjon: 0: 2.14, 4.28, -1.25  //Coord: ca: 2.0, 1.98, 1.12
+    //a1 akselerasjon: 6: 4.0,  -4.0,  -1.8    //Coord:    0  , 4   , 2
+    //a2 akselerasjon: 8: 2.31, -2.31, -0.56  //Coord: ca: 1.0, 2.98, 1.54
+    //a3 akselerasjon: 0: 2.14, 4.28, -1.25  //Coord: ca: 2.0, 1.98, 1.12 //Denne trengs ikke i oppgave f)
 
     //Oppgave e)
     //Hva er ballens koordinater når den begynner å endre retning?
@@ -364,10 +370,25 @@ int main()
     //Regn ut tiden det tar til ballen ruller over fra Ti til Tj og fra Tj til Tk.
 
     //p = deltaposisjon, lengden mellom posisjonene.
-    //
+    //p = v0*t +1/2* a*t^2
 
+    //Første triangel. v0 = 0; Som gjør at v0*t er 0.
+    //p = lengden mellom (0,4,2) og (1,4,1.5)
+   gsl::Vector3D pt1 (0.f,4.f,2.f);
+   gsl::Vector3D pt2 (1.f,4.f,1.5f);
+   gsl::Vector3D pt3 (2.f,2.f,0.5f);
+  // gsl::Vector3D Tj2 (2)
 
+   float p1 = pt2.lengthBetVec3d(pt1);
+   float p2 = pt3.lengthBetVec3d(pt2);
 
+   //t1 = kvadratrot(2*p1/a1)
+   gsl::Vector3D t = gsl::Vector3D(sqrt(2*p1/4),sqrt(2*p1/-4), sqrt(2*p1/-1.8));
+   std::cout << "Tid = " << t << std::endl;
+
+   //t2 = kvadratrot(2*p2/a2)
+   gsl::Vector3D t2 = gsl::Vector3D(sqrt(2*p2/2.31),sqrt(2*p2/-2.31), sqrt(2*p2/-0.56));
+   std::cout << "Tid = " << t2 << std::endl;
 
 
     //--------------------------END--------------------------------------
