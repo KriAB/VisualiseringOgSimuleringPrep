@@ -111,6 +111,8 @@ struct Grid
             for (int j = 0; j < 3-1; ++j)
             {
 
+                //Hvis man skal vise griden i OpenGL, kan det være man må endre på rekkefølgen på punktene,
+                //eller sette på glCullFace(GL_FRONT_AND_BACK​), Tror det er den?;
                 temp.push_back(mGrid[i][j]);
                 temp.push_back(mGrid[i+1][j+1]);
                 temp.push_back(mGrid[i][j+1]);
@@ -119,13 +121,10 @@ struct Grid
                 temp.push_back(mGrid[i+1][j]);
                 temp.push_back(mGrid[i+1][j+1]);
             }
-
         }
 
         return temp;
     }
-
-
 };
 
 //sende inn x og y i denne oppgaven, men for OpenGL prosjektet måtte man ha sendt inn x og z
@@ -184,13 +183,16 @@ int main()
 //    matrise.mGrid[2][1].z = something;
 //    matrise.mGrid[3][2].z = something;
 
-
-
     // Oppgave a.
     // Printe z, Dette bør tegnes opp egentlig.
     matrise.print(1);
 
     // Oppgave b. Tegn opp en triangulering
+
+
+
+
+
     std::cout << "Oppgave 2" << std::endl;
     matrise.print(2);
 
@@ -357,9 +359,9 @@ int main()
 
 
     //Triangel 6,9,12 er de tre første.
-    //a1 akselerasjon: 6: 4.0,  -4.0,  -1.8    //Coord:    0  , 4   , 2
-    //a2 akselerasjon: 8: 2.31, -2.31, -0.56  //Coord: ca: 1.0, 2.98, 1.54
-    //a3 akselerasjon: 0: 2.14, 4.28, -1.25  //Coord: ca: 2.0, 1.98, 1.12 //Denne trengs ikke i oppgave f)
+    //a1 akselerasjon: 6: 4.0,  -4.0,  -1.8    //pt1: Coord:    0  , 4   , 2
+    //a2 akselerasjon: 8: 2.31, -2.31, -0.56  //pt2: Coord: ca: 1.0, 2.98, 1.54
+    //a3 akselerasjon: 0: 2.14, 4.28, -1.25  //pt3: Coord: ca: 2.0, 1.98, 1.12 //Denne trengs ikke i oppgave f)
 
     //Oppgave e)
     //Hva er ballens koordinater når den begynner å endre retning?
